@@ -19,12 +19,17 @@ class gamePage extends StatelessWidget {
     return Builder(
       builder: (_context) {
         _pageProvider = _context.watch<gamepageProvider>();
-        return Scaffold(
-          backgroundColor: Colors.black,
-          body: SafeArea(child: Container(
-            child:_gameUi() ,
-          )),
-        );
+        if(_pageProvider!.questions != null){
+          return Scaffold(
+            backgroundColor: Colors.black,
+            body: SafeArea(child: Container(
+              child:_gameUi() ,
+            )),
+          );
+        }
+        else{
+          return Center(child: CircularProgressIndicator(color: Colors.white,),);
+        }
       }
     );
   }
@@ -50,7 +55,7 @@ class gamePage extends StatelessWidget {
     );
   }
   Widget _question(){
-    return Text("Test Question no 1 are you Racist?",
+    return Text(_pageProvider!.getcurrentQuestionText(),
     textAlign: TextAlign.center,
     style: TextStyle(
       color: Colors.white,
@@ -60,7 +65,9 @@ class gamePage extends StatelessWidget {
   }
 
   Widget _trueButton(){
-    return MaterialButton(onPressed: (){},
+    return MaterialButton(onPressed: (){
+      _pageProvider?.answerQuestion("True");
+    },
       color: Colors.green,
       minWidth: width!*0.80,
       height: height!*0.10,
@@ -73,7 +80,9 @@ class gamePage extends StatelessWidget {
 
   Widget _false(){
     return MaterialButton(
-      onPressed: (){},
+      onPressed: (){
+        _pageProvider?.answerQuestion("False");
+      },
       color: Colors.red,
       minWidth: width!*0.80,
       height: height!*0.10,
